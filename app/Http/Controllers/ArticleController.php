@@ -115,10 +115,12 @@ class ArticleController extends Controller
             $articles = Article::active()->articleTypeId($type_id);
         $articles = $articles
             ->orderBy('created_at','desc')
-            ->forPage($page, $size)
             ->select('id','title','target_url', 'created_at', 'updated_at', 'type_id', 'content')
             ->withOnly('pictures', ['thumbnail_src', 'article_id','photo_src', 'id'], ['state','>',0])
             ->get();
+        $totalArticleNum = $articles->count();
+        $totalPageNum = $totalArticleNum % $size ? $totalArticleNum/$size + 1 : $totalArticleNum/$size;
+        $articles = $articles->forPage($page, $size);
         $articles->map(function ($item) {
             $item->pictures->map(function ($picture){
                 unset($picture['article_id']);
@@ -126,7 +128,15 @@ class ArticleController extends Controller
             $item['type'] = Article::getArticleType()[$item['type_id']];
             unset($item['type_id']);
         });
-        $data = ['state' => 200, 'status' => 200, 'info' => 'success', 'page' => $page,'data'=> $articles->toArray()];
+        $data = [
+            'state' => 200,
+            'status' => 200,
+            'info' => 'success',
+            'totalPageNum' => (int)$totalPageNum,
+            'currentPage' => $page,
+            'totalArticleNum' => $totalArticleNum,
+            'data'=> $articles->toArray()
+        ];
         return response()->json($data);
     }
 }
