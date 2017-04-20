@@ -6,6 +6,7 @@
             <link href="{{URL::asset('assets/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css')}}" rel="stylesheet" type="text/css" />
             <link href="{{URL::asset('assets/plugins/bootstrap-modal/css/bootstrap-modal.css')}}" rel="stylesheet" type="text/css" />
             <link href="{{URL::asset('assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{URL::asset('assets/plugins/bootstrap-select/css/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css" />
         @stop
 
 
@@ -46,7 +47,7 @@
                                     <!-- END SIDEBAR USERPIC -->
                                     <!-- SIDEBAR USER TITLE -->
                                     <div class="profile-usertitle">
-                                        <div class="profile-usertitle-name"> name  </div>
+                                        <div class="profile-usertitle-name">{{session('user.username')}}  </div>
                                         <div class="profile-usertitle-job"> 管理员 </div>
                                     </div>
 
@@ -94,6 +95,15 @@
                                                     <span class="caption-subject font-blue-madison bold uppercase">文 章 列 表</span>
                                                 </div>
                                             </div>
+                                            @if (count($errors) > 0)
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
                                             <div class="portlet-body">
                                                 <div class="table-toolbar">
                                                     <div class="row">
@@ -161,10 +171,11 @@
                                                                 <td> {{$article['content']}} </td>
                                                                 <td> {{$article['author']}} </td>
                                                                 <td> {{$article['type']}} </td>
-                                                                <td class="center"> {{$article['created_time']}} </td>
+                                                                <td class="center"> {{$article['created_at']}} </td>
                                                                 <td>
                                                                     <input type="checkbox" @if($article['state']==1) {{"checked"}} @endif class="make-switch switch-large" data-label-icon="fa fa-fullscreen" data-on-text="<i class='fa fa-check'></i>" data-on="success" data-off-text="<i class='fa fa-times'></i>" data-off="danger"／>
                                                                 </td>
+                                                                <td>edit</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -178,14 +189,15 @@
                             <div id="addArticle"  class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" role="dialog" >
                                 <div class="modal-dialog">
                                     <div class="portlet-body form modal-content" >
-                                        <form action="#" id="article" class="form-horizontal">
+                                        {!! Form::open(['action' => 'ArticleController@upload', 'id'=>'article', 'class'=>'form-horizontal', 'enctype'=>"multipart/form-data"]) !!}
+                                        {{--<form action="{{URL::action('ArticleController@upload')}}" method="post" id="article" class="form-horizontal"  enctype="muitipart/form-data" >--}}
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="false"> × </button>
                                                 <h4 class="modal-title"><i class="fa fa-plus"></i> 添加文章 </h4>
                                             </div>
                                             <div class="modal-body">
 
-                                                <div class="form-body">
+                                                <div class="form-body margin-top-20" >
                                                     <div class="alert alert-danger display-hide">
                                                         <button class="close" data-close="alert"></button> 你填写的信息有误，请检查后再提交 </div>
                                                     <div class="alert alert-success display-hide">
@@ -194,13 +206,20 @@
                                                         <label class="control-label col-md-4">文章类型
                                                             <span class="required"> * </span>
                                                         </label>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-8">
                                                             <div class="input-icon right">
                                                                 <i class="fa"></i>
-                                                                <input type="text" class="form-control" name="type" /> </div>
+                                                                <select class="selectpicker show-tick" name="type"  title="选择添加的文章类型" >
+                                                                   @if (isset($articleTypes))
+                                                                       @foreach($articleTypes as $articleType)
+                                                                           <option value="{{$articleType['value']}}">{{$articleType['display']}}</option>
+                                                                       @endforeach
+                                                                   @endif
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  margin-top-20">
+                                                    <div class="form-group  ">
                                                         <label class="control-label col-md-4">标题
                                                             <span class="required"> * </span>
                                                         </label>
@@ -228,7 +247,7 @@
                                                             <div class="input-icon right">
                                                                 <i class="fa"></i>
                                                                 <input type="text" class="form-control" name="target_url" /> </div>
-                                                            <span class="help-block"> 此处填写文章的网址 </span>
+                                                            <span class="help-block"> 此处填写文章的网址  不能省略http://</span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -240,7 +259,7 @@
                                                             <div class="input-icon right">
                                                                 <i class="fa"></i>
                                                                 <input type="text" class="form-control" name="pictureUrl" /> </div>
-                                                            <span class="help-block"> 此处填写图片的网址 </span>
+                                                            <span class="help-block"> 此处填写图片的网址 不能省略http:// </span>
                                                         </div>
                                                         <div class="col-md-6" id="pictureUpload" style="display: none">
                                                             <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -252,7 +271,7 @@
                                                                     <span class="input-group-addon btn default btn-file">
                                                                 <span class="fileinput-new"> 选择图片 </span>
                                                                 <span class="fileinput-exists"> 修改 </span>
-                                                                <input type="file" name="uploadPicture"> </span>
+                                                                <input type="file" name="uploadPicture"></span>
                                                                     <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                                 </div>
                                                             </div>
@@ -261,9 +280,9 @@
                                                 </div>
                                             <div class="modal-footer">
                                                 <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
-                                                <button type="button" class="btn green" action="submit" >添加</button>
+                                                <button type="submit" class="btn green" action="submit" >添加</button>
                                             </div>
-                                        </form>
+                                        {!! Form::close() !!}
                                     </div>
                                 </div>
                             </div>
@@ -292,6 +311,7 @@
             <script src="{{URL::asset('assets/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
             <script src="{{URL::asset('assets/plugins/jquery-validation/js/additional-methods.min.js')}}"></script>
             <script src="{{URL::asset('assets/plugins/jquery-validation/js/localization/messages_zh.min.js')}}"></script>
+            <script src="{{URL::asset('assets/plugins/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
         @stop
 
 

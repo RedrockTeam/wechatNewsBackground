@@ -9,14 +9,15 @@ class Article extends BaseModel
     protected static $articleType = [
          'hotArticle', 'studyMaterial', 'notice','news',
     ];
-    protected $hidden=['state'];
+    protected static $articleTypeShow = ['热门文章','学习资料', '通知公告','基层动态'];
+    protected $hidden = [];
 
     public function pictures() {
         return $this->hasMany('App\Model\Picture', 'article_id', 'id');
     }
 
-    public function uploader() {
-        return $this->belongsTo('App\Model\User', 'user_id', 'id');
+    public function author() {
+        return $this->belongsTo('App\Model\User', 'user_id');
     }
 
     public function scopeActive($query) {
@@ -42,5 +43,8 @@ class Article extends BaseModel
 
     public static function getArticleType() {
         return self::$articleType;
+    }
+    public static function getArticleTypeShow() {
+        return self::$articleTypeShow;
     }
 }

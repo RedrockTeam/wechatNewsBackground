@@ -20,28 +20,48 @@
                 <div class="col-md-6 login-container bs-reset">
                     <div class="login-content">
                         <h1>管理员登录</h1>
-                        <form action="javascript:;" class="login-form" method="post">
-                            <div class="alert alert-danger display-hide">
-                                <button class="close" data-close="alert"></button>
-                                <span>Enter any username and password. </span>
-                            </div>
+                        {!! Form::open(['url' => url('/'), 'method' => 'post', 'class'=>'login-form']) !!}
+                        {{--<form action="javascript:;" class="login-form" method="post">--}}
+                            {{--<div class="alert alert-danger display-hide">--}}
+                                @if (count($errors) > 0)
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            {{--</div>--}}
                             <div class="row">
-                                <div class="col-xs-6">
-                                    <input class="form-control form-control-solid placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="Username" name="username" required/> </div>
-                                <div class="col-xs-6">
-                                    <input class="form-control form-control-solid placeholder-no-fix form-group" type="password" autocomplete="off" placeholder="Password" name="password" required/> </div>
+                                <div class="form-group  ">
+                                    {!! Form::label('username', '用户名', ['class'=>'control-label col-md-4']) !!}
+                                    <div class="col-md-6">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            {!! Form::text("username",null,['class'=>'form-control', 'autocomplete'=>'off']) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('title', '密码', ['class'=>'control-label col-md-4']) !!}
+                                    <div class="col-md-6">
+                                        <div class="input-icon right">
+                                            <i class="fa"></i>
+                                            {!! Form::password("password",['class'=>'form-control', 'autocomplete'=>'off']) !!}
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     {{--<a class="btn yellow" type="submit">注册</a>--}}
                                 </div>
                                 <div class="col-sm-8 text-right">
-                                    <button class="btn green" type="submit">登陆</button>
+                                    {!! Form::submit('登陆',['class'=>'btn green']) !!}
                                 </div>
                             </div>
-                        </form>
+                        {{--</form>--}}
+                        {!! Form::close() !!}
                     </div>
-
             </div>
         </div>
         @stop

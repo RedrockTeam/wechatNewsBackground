@@ -11,25 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/', function(){
-    return !session('user') ? view('home') : view('login');
+    return session('user') ? redirect()->action('IndexController@show') : view('login');
 });
-
+Route::get('/home', 'IndexController@show');
 Route::post('/', 'UserController@login');
 
-Route::get('/Register', function(){
-    return view('register');
-});
+Route::post('/Article', 'ArticleController@upload');
 
-Route::post('/Register', 'UserController@register');
-
-Route::group(['middleware'=>'article', 'prefix'=>'Article'], function () {
-    Route::post('/', 'ArticleController@upload');
-    Route::post('/delete', 'ArticleController@delete');
-    Route::post('/recover', 'ArticleController@recover');
-});
 

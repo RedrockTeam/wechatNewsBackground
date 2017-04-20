@@ -8,10 +8,15 @@ class UserController extends Controller
 {
     public  function register(Request $request) {
        $this->validate($request, [
-           'username' => 'digits_between:5,25|unique:users|required|alpha_dash',
-           'nickname' => 'digits_between:5,25|required|alpha_dash',
-           'password' => 'required|digits_between:10:32|confirmed',
-       ], []);
+           'username' => 'bail|between:5,25|unique:users,username|required|alpha_dash',
+           'nickname' => 'between:5,25|required|alpha_dash',
+           'password' => 'required|between:10,32|confirmed',
+       ]);
+//        $validator = \Validator::make($request->all(), [
+//            'username' => 'bail|between:5,25|unique:users,username|required|alpha_dash',
+//            'nickname' => 'between:5,25|required|alpha_dash',
+//            'password' => 'required|between:10,32|confirmed',
+//        ]);
         $data = $request->only(['username', 'nickname', 'password']);
         $data['password'] = $this->pwdHash($data['password']);
         $user = User::create($data);
@@ -38,7 +43,7 @@ class UserController extends Controller
         }
         $user = $request->has('username')? User::find($request->get('user_id')) : User::where("username",$request->get('username'))->frist();
         if ($this->pwdVerify($request->get('oldPassword'), $user->password)) {
-            $user->password = $this->pwdHash($request->get('username'));
+            $user->password = $this->pwdHash($request->get('password'));
             $user->save();
             return \Response::json(['status' => 200, 'state' => 200, 'info' => 'success']);
         }
@@ -48,7 +53,7 @@ class UserController extends Controller
 
     //密码序列化
     protected function pwdHash($password) {
-        $opt = ['salt' =>bin2hex(random_bytes(8)), 'cost' => 20];
+        $opt = ['cost' => 10];
         return password_hash($password, PASSWORD_BCRYPT, $opt);
     }
     //密码验证
@@ -61,11 +66,10 @@ class UserController extends Controller
             'username' => 'required|exists:users,username,state,1',
             'password' => 'required'
         ]);
-        $user = User::where('username', $request->get('username'))->find();
+        $user = User::where('username', $request->get('username'))->first();
         if(!$this->pwdVerify($request->get('password'), $user->password))
             \Redirect::to('/')->withErrors(['你的密码或者用户名错误']);
-        session('user', $user->toArray());
-        \Redirect::to('/');
+        $request->session()->put('user', $user->toArray());
     }
 
 

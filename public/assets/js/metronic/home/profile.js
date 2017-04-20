@@ -6,23 +6,32 @@ var Profile = function() {
 
         //main function
         init: function() {
+            $('.selectpicker').selectpicker({
+                iconBase: 'fa',
+                tickIcon: 'fa-check'
+            });
             $('.dropdown-toggle').dropdown();
             Profile.initMiniCharts();
-
             var ArticleModal = $('#addArticle');
             ArticleModal.on("shown.bs.modal", function() {
+                var pictureUpload =  $('#pictureUpload', ArticleModal);
+                var pictureUrl =  $('#pictureUrl', ArticleModal);
                 $('#switch-pic', ArticleModal).on('switchChange.bootstrapSwitch', function (e, state) {
                    if(state) {
-                       $('#pictureUpload', ArticleModal).hide();
+                       pictureUpload.hide();
+                       $('input', pictureUpload).val('');
                        $('#pictureUrl', ArticleModal).show();
                    } else {
                        $('#pictureUpload', ArticleModal).show();
                        $('#pictureUrl', ArticleModal).hide();
+                       $('input', pictureUrl).val('');
                    }
                 });
                 Profile.handleValidation();
+
             });
         },
+
           handleValidation : function() {
               // for more info visit the official plugin documentation:
               // http://docs.jquery.com/Plugins/Validation
@@ -37,6 +46,9 @@ var Profile = function() {
                   focusInvalid: false, // do not focus the last invalid input
                   ignore: "",  // validate all fields including form hidden input
                   rules: {
+                      type: {
+                          required:true
+                      },
                       title: {
                           minlength: 2,
                           maxlength:255,
@@ -50,11 +62,10 @@ var Profile = function() {
                           url: true
                       },
                       pictureUrl: {
-                          required: true,
                           url: true
                       },
                       pictureUpload: {
-                          extension: ['png','jpeg','jpg','bmp','gif']
+                          extension:  "png|jpe?g|gif"
                       }
 
                   },
