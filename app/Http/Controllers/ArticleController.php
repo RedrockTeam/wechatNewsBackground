@@ -39,7 +39,7 @@ class ArticleController extends Controller
         $pictureInfo['photo_src'] = \URL::route('showPicture',['name'=>$pictureInfo['photo_src']]);
         $pictureInfo['thumbnail_src'] = \URL::route('showPicture',['name'=>$pictureInfo['thumbnail_src']]);
         Picture::create($pictureInfo);
-        return \Redirect::action('IndexController@show');
+        return \Redirect::action('IndexController@show')->withHeaders(['Access-Control-Allow-Origin'=>'*','Access-Control-Allow-Methods'=>'POST,GET']);
     }
 
     /**
