@@ -32,6 +32,6 @@ Route::get('/Photo/{name}', function($name){
         return response()->file(Storage::disk('photo')->url($name));
     else
         return view('errors.errors');
-});
+})->name('showPicture');
 
 Route::post('/User', 'UserController@register');

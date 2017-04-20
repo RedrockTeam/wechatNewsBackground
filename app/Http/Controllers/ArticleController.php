@@ -36,6 +36,8 @@ class ArticleController extends Controller
         unset($article['type']);
         $article = Article::create($article);
         $pictureInfo['article_id'] = $article['id'];
+        $pictureInfo['photo_src'] = \URL::route('showPicture',['name'=>$pictureInfo['photo_src']]);
+        $pictureInfo['thumbnail_src'] = \URL::route('showPicture',['name'=>$pictureInfo['thumbnail_src']]);
         Picture::create($pictureInfo);
         return \Redirect::action('IndexController@show');
     }
