@@ -15,7 +15,8 @@ class ArticleController extends Controller
         $user = $request->session()->get('user');
         if(empty($user))    return response()->json(['state'=>403, 'status'=>403, 'info'=>'未登录'], 403);
         $this->validate($request, [
-            'title' => 'required|min:2',
+            'title' => 'required|min:1|max:255',
+            'content' => 'min:1|max:255',
             'type'  => 'required',
             'target_url' => 'url|required',
             'pictureUrl' => 'url',
@@ -36,8 +37,6 @@ class ArticleController extends Controller
         unset($article['type']);
         $article = Article::create($article);
         $pictureInfo['article_id'] = $article['id'];
-        $pictureInfo['photo_src'] = \URL::route('showPicture',['name'=>$pictureInfo['photo_src']]);
-        $pictureInfo['thumbnail_src'] = \URL::route('showPicture',['name'=>$pictureInfo['thumbnail_src']]);
         Picture::create($pictureInfo);
         return \Redirect::action('IndexController@show');
     }
@@ -55,6 +54,8 @@ class ArticleController extends Controller
         \Storage::disk('photo')->putFileAs('', $file, $fileName);
         $this->makeThumbnail($fileName);
         $thumbnail = $this->makeThumbnail($fileName);
+        $fileName = \URL::route('showPicture',['name'=>$fileName]);
+        $thumbnail = \URL::route('showPicture', ['name'=>$thumbnail]);
         return ['photo_src' => $fileName, 'thumbnail_src' => $thumbnail];
     }
     protected function processWebPicture($url) {
@@ -83,6 +84,8 @@ class ArticleController extends Controller
         $data = $res->getBody();
         \Storage::disk('photo')->put($fileName, $data->getContents());
         $thumbnail = $this->makeThumbnail($fileName);
+        $fileName = \URL::route('showPicture',['name'=>$fileName]);
+        $thumbnail = \URL::route('showPicture', ['name'=>$thumbnail]);
         return ['photo_src' => $fileName, 'thumbnail_src' => $thumbnail];
     }
 
@@ -109,11 +112,9 @@ class ArticleController extends Controller
         if($type_id === false)  return response()->json(['status' => 404, 'state' => '404', 'info' => '错误文章类型']);
         $page = $request->get('page', 1);
         $size = $request->get('size', 5);
-        if ($type_id == 0)
-            $articles = Article::where('state', '>', 2);
-        else
-            $articles = Article::active()->articleTypeId($type_id);
-        $articles = $articles
+
+        $articles =  Article::active()
+            ->articleTypeId($type_id)
             ->orderBy('created_at','desc')
             ->select('id','title','target_url', 'created_at', 'updated_at', 'type_id', 'content')
             ->withOnly('pictures', ['thumbnail_src', 'article_id','photo_src', 'id'], ['state','>',0])
@@ -121,6 +122,7 @@ class ArticleController extends Controller
         $totalArticleNum = $articles->count();
         $totalPageNum = $totalArticleNum % $size ? $totalArticleNum/$size + 1 : $totalArticleNum/$size;
         $articles = $articles->forPage($page, $size);
+        $articles = $articles->values();
         $articles->map(function ($item) {
             $item->pictures->map(function ($picture){
                 unset($picture['article_id']);
@@ -133,10 +135,29 @@ class ArticleController extends Controller
             'status' => 200,
             'info' => 'success',
             'totalPageNum' => (int)$totalPageNum,
-            'currentPage' => $page,
+            'currentPage' => (int)$page,
             'totalArticleNum' => $totalArticleNum,
             'data'=> $articles->toArray()
         ];
         return response()->json($data);
+    }
+    public function edit(Request $request) {
+        if (empty(session('user')))     return response()->json(['state'=>403,'status'=>404,'info'=>'未登陆 forbidden'],403);
+        $validator = \Validator::make($request->all(),[
+            'state' => 'numeric',
+            'id'    => 'required|exists:articles,id',
+            'title' => 'string|max:255',
+            'content' => 'string|max:255',
+            'target_url' => 'url',
+            'pictureUrl' => 'url',
+            'uploadPicture' => 'file|image|max:4096'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['state' => 404, 'status' => 404,'info'=>implode($validator->errors()->all(),';')],404);
+        }
+        if($request->hasFile('uploadPicture') || $request->has('pictureUrl')) {
+
+            $info = $this->processUploadPicture($request->file('uploadPicture'));
+        }
     }
 }
