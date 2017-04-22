@@ -13,12 +13,18 @@
 
 
 
-Route::get('/', function(){
-    return session('user') ? redirect()->action('IndexController@show') : view('login');
-});
-Route::get('/home', 'IndexController@show');
-Route::post('/', 'UserController@login');
+
+Route::get('/login', function (){
+    return view('login');
+})->name('loginPage');
+Route::get('/', 'IndexController@show')->name('home');
+
+Route::post('/login', 'UserController@login');
 
 Route::post('/Article', 'ArticleController@upload');
+
+Route::post('/ArticleEdit', 'ArticleController@edit');
+
+Route::post('/ArticleState', 'ArticleController@editState');
 
 

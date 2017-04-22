@@ -66,18 +66,12 @@
                                 <div class="portlet light ">
                                     <!-- STAT -->
                                     <div class="row list-separated profile-stat">
+                                        @foreach($articleTypes as $articleType)
                                         <div class="col-md-4 col-sm-4 col-xs-6">
-                                            <div class="uppercase profile-stat-title"> 37 </div>
-                                            <div class="uppercase profile-stat-text"> 学习资料 </div>
+                                            <div class="uppercase profile-stat-title"> {{$articleType['article_num']}} </div>
+                                            <div class="uppercase profile-stat-text"> {{$articleType['display']}} </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                            <div class="uppercase profile-stat-title"> 51 </div>
-                                            <div class="uppercase profile-stat-text"> 通知公告 </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                            <div class="uppercase profile-stat-title"> 61 </div>
-                                            <div class="uppercase profile-stat-text"> 基层动态 </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                     <!-- END STAT -->
                                 </div>
@@ -95,15 +89,15 @@
                                                     <span class="caption-subject font-blue-madison bold uppercase">文 章 列 表</span>
                                                 </div>
                                             </div>
+                                            <div class="alert alert-danger" id="table-alert">
                                             @if (count($errors) > 0)
-                                                <div class="alert alert-danger">
                                                     <ul>
                                                         @foreach ($errors->all() as $error)
                                                             <li>{{ $error }}</li>
                                                         @endforeach
                                                     </ul>
-                                                </div>
                                             @endif
+                                            </div>
                                             <div class="portlet-body">
                                                 <div class="table-toolbar">
                                                     <div class="row">
@@ -113,6 +107,17 @@
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
+                                                            @if (isset($articleTypes))
+                                                            <div class="btn-group">
+                                                                <select class="selectpicker show-tick"   title="筛选文章类型"  data-style="btn blue-sharp sbold  btn-outline " data-width="125px" id="siftType">
+                                                                    <option value="-1">全部</option>
+
+                                                                        @foreach($articleTypes as $key =>$articleType)
+                                                                            <option value="{{$key}}">{{$articleType['display']}}</option>
+                                                                        @endforeach
+                                                                </select>
+                                                            </div>
+                                                            @endif
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="btn-group pull-right">
@@ -121,39 +126,37 @@
                                                                 </button>
                                                                 <ul class="dropdown-menu pull-right">
                                                                     <li>
-                                                                        <a href="javascript:;">
-                                                                            <i class="fa fa-remove" data-operate="delete" ></i> 删 除 </a>
+                                                                        <a href="javascript:;" data-operate="delete" data-target="#articleList">
+                                                                            <i class="fa fa-remove" ></i> 删 除 </a>
                                                                     </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">
-                                                                            <i class="fa fa-retweet" data-operate="recover"></i> 恢 复 </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">
-                                                                            <i class="fa fa-refresh" data-operate="refresh"></i> 刷 新 </a>
-                                                                    </li>
+                                                                    {{--<li>--}}
+                                                                        {{--<a href="javascript:;">--}}
+                                                                            {{--<i class="fa fa-retweet" data-operate="hot" data-target="#articleList"></i> 恢 复 </a>--}}
+                                                                    {{--</li>--}}
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="articleList">
+                                                <table class="table table-striped table-bordered table-hover table-checkable " id="articleList">
                                                     <thead>
                                                         <tr>
-                                                            <th>
+                                                            <th class="unorderable unsearchable">
                                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
+                                                                    <input type="checkbox" class="group-checkable" data-set="#articleList .checkboxes" />
                                                                     <span></span>
                                                                 </label>
                                                             </th>
                                                             <th> 文章编号 </th>
                                                             <th> 文章标题 </th>
-                                                            <th> 文章内容 </th>
+                                                            <th> 文章导语 </th>
                                                             <th> 上传人员 </th>
-                                                            <th> 文章类型 </th>
-                                                            <th> 文章上传时间 </th>
-                                                            <th> 文章状态 </th>
-                                                            <th> 修改 </th>
+                                                            <th class="unsearchable"> 文章类型 </th>
+                                                            <th class="unsearchable"> 文章上传时间 </th>
+                                                            <th class="unsearchable unorderable"> 热门 </th>
+                                                            <th class="unorderable unsearchable"> 修改 </th>
+                                                            <th class="unorderable invisible"> state </th>
+                                                            <th class="unorderable invisible"> article_id </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -166,16 +169,18 @@
                                                                         <span></span>
                                                                     </label>
                                                                 </td>
-                                                                <td> {{sprintf('%03d',$article['id'])}} </td>
+                                                                <td> {{sprintf('%04d',$article['id'])}} </td>
                                                                 <td> {{$article['title']}} </td>
                                                                 <td> {{$article['content']}} </td>
                                                                 <td> {{$article['author']}} </td>
-                                                                <td> {{$article['type']}} </td>
-                                                                <td class="center"> {{$article['created_at']}} </td>
-                                                                <td>
-                                                                    <input type="checkbox" @if($article['state']==1) {{"checked"}} @endif class="make-switch switch-large" data-label-icon="fa fa-fullscreen" data-on-text="<i class='fa fa-check'></i>" data-on="success" data-off-text="<i class='fa fa-times'></i>" data-off="danger"／>
+                                                                <td class="unsearchable" > {{$article['type']}} </td>
+                                                                <td class="center unsearchable"> {{$article['created_at']}} </td>
+                                                                <td class="unsearchable unorderable" >
+                                                                    <input type="checkbox" @if($article['state']==2) {{"checked"}} @endif class="make-switch switch-large" data-label-icon="fa fa-fullscreen" data-on-text="<i class='fa fa-check'></i>" data-on-color="success" data-id="{{$article['id']}}" data-off-text="<i class='fa fa-times'></i>" data-off-color="danger"／>
                                                                 </td>
-                                                                <td>edit</td>
+                                                                <td class="unorderable unsearchable" >edit</td>
+                                                                <td class="unorderable invisible">{{$article['state']}}</td>
+                                                                <td class="unorderable invisible">{{$article['type_id']}}</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -202,6 +207,7 @@
                                                         <button class="close" data-close="alert"></button> 你填写的信息有误，请检查后再提交 </div>
                                                     <div class="alert alert-success display-hide">
                                                         <button class="close" data-close="alert"></button> 填写完成 </div>
+                                                    @if (isset($articleTypes))
                                                     <div class="form-group">
                                                         <label class="control-label col-md-4">文章类型
                                                             <span class="required"> * </span>
@@ -210,16 +216,17 @@
                                                             <div class="input-icon right">
                                                                 <i class="fa"></i>
                                                                 <select class="selectpicker show-tick" name="type"  title="选择添加的文章类型" >
-                                                                   @if (isset($articleTypes))
-                                                                       @foreach($articleTypes as $articleType)
+                                                                       @foreach($articleTypes as $key => $articleType)
+                                                                           @if ($key !== 0)
                                                                            <option value="{{$articleType['value']}}">{{$articleType['display']}}</option>
+                                                                            @endif
                                                                        @endforeach
-                                                                   @endif
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  ">
+                                                    @endif
+                                                    <div class="form-group ">
                                                         <label class="control-label col-md-4">标题
                                                             <span class="required"> * </span>
                                                         </label>
@@ -319,7 +326,9 @@
             <script src="{{URL::asset('assets/js/metronic/home/profile.js')}}" type="text/javascript"></script>
             <script src="{{URL::asset('assets/js/metronic/home/table-datatables-managed.js')}}" type="text/javascript"></script>
             <script src="{{URL::asset('assets/js/metronic/home/ui-extended-modals.js')}}" type="text/javascript"></script>
+            @include('vendor.metronic.home.js')
         @stop
+
 
 
 

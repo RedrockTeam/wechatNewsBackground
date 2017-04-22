@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class IndexController extends Controller
 {
     public function show(Request $request) {
-        $user = session('user');
+        if (empty(session('user')))
+            return redirect()->route('loginPage');
         $articles = Article::active()
             ->select('id','title','target_url', 'created_at', 'updated_at', 'type_id','user_id', 'content','state')
             ->withOnly('pictures', ['thumbnail_src', 'article_id','photo_src', 'id'], ['state','>',0])
@@ -20,20 +21,23 @@ class IndexController extends Controller
             foreach ($article['pictures'] as &$picture) {
                 unset($picture['article_id']);
             }
-            $article['type'] = Article::getArticleType()[$article['type_id']];
-            unset($article['type_id']);
+            $article['type'] = Article::getArticleTypeShow()[$article['type_id']];
         }
+        $articlesNum = Article::groupBy('type_id')->active()->selectRaw('count(id) as article_num, type_id')->get()->pluck('article_num', 'type_id')->all();
+        $articlesNum[0] = Article::active()->ArticleTypeId(0)->count();
         $articleTypes = [];
         foreach (Article::getArticleType() as $key => $value) {
-            if ($key === 0)  continue;
             $articleType['value'] =$value;
             $articleType['display'] = Article::getArticleTypeShow()[$key];
+            $articleType['article_num'] = $articlesNum[$key];
             $articleTypes[] = $articleType;
         }
+
         $data = [
             'user'=>session(['user']),
             'articleTypes'=>$articleTypes,
             'articles' => $articles,
+            'articleNums' => $articlesNum,
         ];
         return view('home', $data);
     }

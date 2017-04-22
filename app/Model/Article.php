@@ -11,6 +11,7 @@ class Article extends BaseModel
     ];
     protected static $articleTypeShow = ['热门文章','学习资料', '通知公告','基层动态'];
     protected $hidden = [];
+    protected static $actions = ['delete','recover', 'hot', 'unHot'];
 
     public function pictures() {
         return $this->hasMany('App\Model\Picture', 'article_id', 'id');
@@ -25,19 +26,22 @@ class Article extends BaseModel
     }
 
     public function scopeTrash($query) {
-        return $query->where('state', 0);
+        return $query->where('state', '<', 0);
     }
 
 
     public function scopeArticleType($query, $type) {
         $type_id = array_search($type, Article::getArticleType(),true);
         if ($type_id === false) return false;
-        $query->where("type_id", $type_id);
-        return $query;
+
+        return $this->scopeArticleTypeId($query, $type_id);
     }
 
     public function scopeArticleTypeId($query,$type_id) {
-        $query->where("type_id", $type_id);
+        if ((int)$type_id === 0)
+            $query->where("state",  '2');
+        else
+            $query->where("type_id", $type_id);
         return $query;
     }
 
@@ -46,5 +50,8 @@ class Article extends BaseModel
     }
     public static function getArticleTypeShow() {
         return self::$articleTypeShow;
+    }
+    public static function getActions() {
+        return self::$actions;
     }
 }

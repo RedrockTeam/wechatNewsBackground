@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Picture extends BaseModel
 {
     protected $guarded=['state'];
@@ -22,6 +20,6 @@ class Picture extends BaseModel
     }
 
     public function scopeTrash($query) {
-        return $query->where('state', 0);
+        return $query->where('state', '<',0);
     }
 }

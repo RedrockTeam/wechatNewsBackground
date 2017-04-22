@@ -20,7 +20,7 @@
                 <div class="col-md-6 login-container bs-reset">
                     <div class="login-content">
                         <h1>管理员登录</h1>
-                        {!! Form::open(['url' => url('/'), 'method' => 'post', 'class'=>'login-form']) !!}
+                        {!! Form::open(['url' => URL::action('UserController@login'), 'method' => 'post', 'class'=>'login-form']) !!}
                         {{--<form action="javascript:;" class="login-form" method="post">--}}
                             {{--<div class="alert alert-danger display-hide">--}}
                                 @if (count($errors) > 0)
@@ -71,6 +71,7 @@
         <script src="{{URL::asset('assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('assets/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('assets/plugins/jquery-validation/js/additional-methods.min.js')}}" type="text/javascript"></script>
+        <script src="{{URL::asset('assets/plugins/jquery-validation/js/localization/messages_zh.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('assets/plugins/select2/js/select2.full.min.js')}}" type="text/javascript"></script>
         <script src="{{URL::asset('assets/plugins/backstretch/jquery.backstretch.min.js')}}" type="text/javascript"></script>
         @stop

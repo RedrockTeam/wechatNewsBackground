@@ -18,8 +18,8 @@ class ArticleController extends Controller
             'title' => 'required|min:1|max:255',
             'content' => 'min:1|max:255',
             'type'  => 'required',
-            'target_url' => 'url|required',
-            'pictureUrl' => 'url',
+            'target_url' => 'active_url|required',
+            'pictureUrl' => 'active_url',
             'uploadPicture' => 'file|image|max:4096'
         ]);
 
@@ -144,20 +144,81 @@ class ArticleController extends Controller
     public function edit(Request $request) {
         if (empty(session('user')))     return response()->json(['state'=>403,'status'=>404,'info'=>'未登陆 forbidden'],403);
         $validator = \Validator::make($request->all(),[
-            'state' => 'numeric',
             'id'    => 'required|exists:articles,id',
             'title' => 'string|max:255',
             'content' => 'string|max:255',
-            'target_url' => 'url',
-            'pictureUrl' => 'url',
+            'target_url' => 'active_url',
+            'pictureUrl' => 'active_url',
             'uploadPicture' => 'file|image|max:4096'
         ]);
         if ($validator->fails()) {
             return response()->json(['state' => 404, 'status' => 404,'info'=>implode($validator->errors()->all(),';')],404);
         }
         if($request->hasFile('uploadPicture') || $request->has('pictureUrl')) {
-
-            $info = $this->processUploadPicture($request->file('uploadPicture'));
+            if ($request->hasFile('uploadPicture'))
+                $info = $this->processUploadPicture($request->file('uploadPicture'));
+            else
+                $info = $this->processWebPicture($request->get('pictureUrl'));
+            if(!$info)   return response()->json(['state' => 404, 'status' => 404,'info'=>'error picture'],404);
+           Picture::active()->where('article_id',$request->get('id'))->update(['state'=>0]);
+           $info['article_id'] = $request->get('id');
+           Picture::create($info);
         }
+        $update = $request->except(['id','pictureUrl','uploadPicture']);
+        $article=  Article::active()->find($request->get('id'));
+        if (!empty($update)) {
+            $article =  $article->update($update);
+        }
+        $article = $article->onlyWith('pictures', ['id','photo_src', 'thumbnail_src'])->get();
+        dd($article);
+        return \Response::json(['state'=>200,'status'=>200,'info'=>'success','data'=>$article->toArray()]);
+    }
+
+    public function editState(Request $request) {
+        if (empty(session('user')))     return response()->json(['state'=>403,'status'=>404,'info'=>'未登陆 forbidden'],403);
+        $validator = \Validator::make($request->all(),[
+            'action' => 'required|string',
+            'ids.*'    => 'required|exists:articles,id'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['state' => 404, 'status' => 404,'info'=>implode($validator->errors()->all(),';')],404);
+        }
+
+        $articles = Article::whereIn('id',$request->get('ids'))->get();
+        $data = [];
+        foreach ($articles as $article) {
+            switch ($request->get('action')) {
+                case 'delete':
+                    if ($article->state <= 0) {
+                        return response()->json(['state' => 403, 'status' => 403, 'info' => 'errorState'], 404);
+                    }
+                    $article->state = -$article->state;
+                    break;
+                case 'recover':
+                    if ($article->state >= 0) {
+                        return response()->json(['state' => 403, 'status' => 403, 'info' => 'errorState'], 404);
+                    }
+                    $article->state = -$article->state;
+                    break;
+                case 'hot':
+                    if ((int)$article->state !== 1) {
+                        return response()->json(['state' => 403, 'status' => 403, 'info' => 'errorState'], 404);
+                    }
+                    $article->state = 2;
+                    break;
+                case 'unHot':
+                    if ((int)$article->state !== 2) {
+                        return response()->json(['state' => 403, 'status' => 403, 'info' => 'errorState'], 404);
+                    }
+                    $article->state = 1;
+                    break;
+                default:
+                    return response()->json(['state' => 403, 'status' => 403, 'info' => 'error action']);
+            }
+            $article->save();
+            $data[] = $article->makeVisible('state')->toArray();
+        }
+
+        return response()->json(['state'=>200, 'status'=>200, 'info'=>'success', 'data'=>$data ]);
     }
 }

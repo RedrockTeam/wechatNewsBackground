@@ -21,7 +21,7 @@ class UserController extends Controller
         $data['password'] = $this->pwdHash($data['password']);
         $user = User::create($data);
         session('user', $user->toArray());
-        \Redirect::to('/');
+        return \Response::json(['state'=>200,'info'=>'success']);
 
     }
 
@@ -68,8 +68,9 @@ class UserController extends Controller
         ]);
         $user = User::where('username', $request->get('username'))->first();
         if(!$this->pwdVerify($request->get('password'), $user->password))
-            \Redirect::to('/')->withErrors(['你的密码或者用户名错误']);
+            return \Redirect::to('/')->withErrors(['你的密码或者用户名错误']);
         $request->session()->put('user', $user->toArray());
+        return \Redirect::route('home');
     }
 
 
