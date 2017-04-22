@@ -102,7 +102,9 @@ class ArticleController extends Controller
             return $name;
         };
         $fileName = time().'-'.$name(8).'.'.$ext;
-        \Storage::disk('photo')->put($fileName, $photo->resize(180,null)->stream('png', 60)->getContents());
+        $width = 360;
+        $height = $photo->height()/$photo->width();
+        \Storage::disk('photo')->put($fileName, $photo->fit($width,$height)->stream('png', 60)->getContents());
         return $fileName;
     }
 
@@ -111,7 +113,10 @@ class ArticleController extends Controller
         $type_id = array_search($type, Article::getArticleType(),true);
         if($type_id === false)  return response()->json(['status' => 404, 'state' => '404', 'info' => '错误文章类型']);
         $page = $request->get('page', 1);
-        $size = $request->get('size', 5);
+        if ((int)$type_id === 0)
+            $size = $request->get('size', 3);
+        else
+            $size = $request->get('size',5);
 
         $articles =  Article::active()
             ->articleTypeId($type_id)
