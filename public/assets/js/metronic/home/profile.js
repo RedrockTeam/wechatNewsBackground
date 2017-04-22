@@ -19,12 +19,12 @@ var Profile = function() {
                 $('#switch-pic', ArticleModal).on('switchChange.bootstrapSwitch', function (e, state) {
                    if(state) {
                        pictureUpload.hide();
-                       $('input', pictureUpload).val('');
-                       $('#pictureUrl', ArticleModal).show();
+                       $(':file', pictureUpload).fileinput('reset');
+                       pictureUrl.show();
                    } else {
-                       $('#pictureUpload', ArticleModal).show();
-                       $('#pictureUrl', ArticleModal).hide();
-                       $('input', pictureUrl).val('');
+                       pictureUpload.show();
+                       pictureUrl.hide();
+                       $(':text', pictureUrl).val('');
                    }
                 });
                 Profile.handleValidation();

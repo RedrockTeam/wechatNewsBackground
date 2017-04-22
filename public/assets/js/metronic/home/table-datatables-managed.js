@@ -81,12 +81,12 @@ var TableDatatablesManaged = function () {
         });
         $("#siftType").on('change', function () {
            var type = this.value;
-            dataTable.columns([10]).search('');
             dataTable.columns([9]).search('');
+            dataTable.columns([8]).search('');
           if (parseInt(type) > 0) {
-              dataTable.columns([10]).search(type);
+              dataTable.columns([9]).search(type);
           } else if(parseInt(type) === 0)  {
-              dataTable.columns([9]).search('2');
+              dataTable.columns([8]).search('2');
           }
             dataTable.draw();
         });

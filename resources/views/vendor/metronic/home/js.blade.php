@@ -18,8 +18,9 @@
                 success: function (data) {
                     if (data['status'] === 200 || data['state'] === 200) {
                         var cell = dataTable.cell($this.parentsUntil("tr").last());
-                        var state = dataTable.cell({row:cell.index()['row'],column: 9});
+                        var state = dataTable.cell({row:cell.index()['row'],column: 8});
                         state.data(data['data'][0]['state']);
+                        console.log(state.data());
                         alert.hide();
                         dataTable.draw();
                     } else {
@@ -66,7 +67,7 @@
             $('.checkboxes:checked',table).each(function () {
                 var $this = $(this);
                 var cell = dataTable.cell($this.parentsUntil("tr").last());
-                var state = dataTable.cell({row:cell.index()['row'],column: 9});
+                var state = dataTable.cell({row:cell.index()['row'],column: 8});
                 if (!judge(operate, state.data()))  return false;
                 states.push(state);
                 ids.push($this.val());

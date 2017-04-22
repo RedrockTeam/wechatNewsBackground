@@ -101,10 +101,9 @@ class ArticleController extends Controller
                 $name .= $basename[rand(0,58)];
             return $name;
         };
-        $fileName = time().'-'.$name(8).'.'.$ext;
-        $width = 360;
-        $height = $photo->height()/$photo->width();
-        \Storage::disk('photo')->put($fileName, $photo->fit($width,$height)->stream('png', 60)->getContents());
+        $fileName = time().'-'.$name(8).$ext;
+        $width = $photo->width()> 360 ? 360 : $photo->width()*0.6;
+        \Storage::disk('photo')->put($fileName, $photo->fit($width)->stream('png', 60)->getContents());
         return $fileName;
     }
 
@@ -120,7 +119,7 @@ class ArticleController extends Controller
 
         $articles =  Article::active()
             ->articleTypeId($type_id)
-            ->orderBy('created_at','desc')
+            ->orderBy('updated_at','desc')
             ->select('id','title','target_url', 'created_at', 'updated_at', 'type_id', 'content')
             ->withOnly('pictures', ['thumbnail_src', 'article_id','photo_src', 'id'], ['state','>',0])
             ->get();

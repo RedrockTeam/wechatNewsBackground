@@ -21,11 +21,13 @@ Route::group([ 'prefix'=>'ArticleOperate'], function () {
     Route::post('/delete', 'ArticleController@delete');
     Route::post('/recover', 'ArticleController@recover');
 });
+Route::group(['prefix'=>'Article', 'middleware'=>'cors'],function(){
+    Route::post('/','ArticleController@show');
+    Route::get('/','ArticleController@show');
+    Route::get('{type}', 'ArticleController@show');
+    Route::post('{type}', 'ArticleController@show');
+});
 
-Route::post('/Article/','ArticleController@show');
-Route::get('/Article/','ArticleController@show');
-Route::get('Article/{type?}', 'ArticleController@show');
-Route::post('Article/{type?}', 'ArticleController@show');
 
 Route::get('/Photo/{name}', function($name){
     if( Storage::disk('photo')->exists($name))

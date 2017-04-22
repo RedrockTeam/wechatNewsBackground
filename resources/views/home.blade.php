@@ -47,7 +47,7 @@
                                     <!-- END SIDEBAR USERPIC -->
                                     <!-- SIDEBAR USER TITLE -->
                                     <div class="profile-usertitle">
-                                        <div class="profile-usertitle-name">{{session('user.username')}}  </div>
+                                        <div class="profile-usertitle-name">{{session('user.nickname')}}  </div>
                                         <div class="profile-usertitle-job"> 管理员 </div>
                                     </div>
 
@@ -154,7 +154,6 @@
                                                             <th class="unsearchable"> 文章类型 </th>
                                                             <th class="unsearchable"> 文章上传时间 </th>
                                                             <th class="unsearchable unorderable"> 热门 </th>
-                                                            <th class="unorderable unsearchable"> 修改 </th>
                                                             <th class="unorderable invisible"> state </th>
                                                             <th class="unorderable invisible"> article_id </th>
                                                         </tr>
@@ -178,7 +177,6 @@
                                                                 <td class="unsearchable unorderable" >
                                                                     <input type="checkbox" @if($article['state']==2) {{"checked"}} @endif class="make-switch switch-large" data-label-icon="fa fa-fullscreen" data-on-text="<i class='fa fa-check'></i>" data-on-color="success" data-id="{{$article['id']}}" data-off-text="<i class='fa fa-times'></i>" data-off-color="danger"／>
                                                                 </td>
-                                                                <td class="unorderable unsearchable" >edit</td>
                                                                 <td class="unorderable invisible">{{$article['state']}}</td>
                                                                 <td class="unorderable invisible">{{$article['type_id']}}</td>
                                                             </tr>

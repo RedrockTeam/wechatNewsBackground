@@ -30,9 +30,8 @@ class IndexController extends Controller
             $articleType['value'] =$value;
             $articleType['display'] = Article::getArticleTypeShow()[$key];
             $articleType['article_num'] = isset($articlesNum[$key]) ? $articlesNum[$key] : 0;
-            $articleTypes[] = $articleType;
+            $articleTypes[$key] = $articleType;
         }
-
         $data = [
             'user'=>session(['user']),
             'articleTypes'=>$articleTypes,

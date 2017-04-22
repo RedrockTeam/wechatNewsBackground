@@ -6,7 +6,6 @@ var bootStrap = function () {
         init: function () {
             $("[name='my-checkbox']").bootstrapSwitch();
             $("[data-opereate='delete']").on('click',function(){
-
             });
         }
     };
