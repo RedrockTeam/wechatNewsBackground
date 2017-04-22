@@ -28,8 +28,8 @@ class IndexController extends Controller
         $articleTypes = [];
         foreach (Article::getArticleType() as $key => $value) {
             $articleType['value'] =$value;
-            $articleType['display'] = isset(Article::getArticleTypeShow()[$key]) ? Article::getArticleTypeShow()[$key] : 0;
-            $articleType['article_num'] = $articlesNum[$key];
+            $articleType['display'] = Article::getArticleTypeShow()[$key];
+            $articleType['article_num'] = isset($articlesNum[$key]) ? $articlesNum[$key] : 0;
             $articleTypes[] = $articleType;
         }
 
