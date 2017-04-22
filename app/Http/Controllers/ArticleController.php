@@ -83,7 +83,7 @@ class ArticleController extends Controller
         $fileName = time().'-'.$name(8).'.'.$ext;
         $data = $res->getBody();
         \Storage::disk('photo')->put($fileName, $data->getContents());
-        $thumbnail = $this->makeThumbnail($fileName);
+        $thumbnail = in_array($ext,['png','jpeg','gif']) ? $this->makeThumbnail($fileName)  : $fileName;
         $fileName = \URL::route('showPicture',['name'=>$fileName]);
         $thumbnail = \URL::route('showPicture', ['name'=>$thumbnail]);
         return ['photo_src' => $fileName, 'thumbnail_src' => $thumbnail];
@@ -102,8 +102,9 @@ class ArticleController extends Controller
             return $name;
         };
         $fileName = time().'-'.$name(8).$ext;
-        $width = $photo->width()> 360 ? 360 : $photo->width()*0.6;
-        \Storage::disk('photo')->put($fileName, $photo->fit($width)->stream('png', 60)->getContents());
+        $width = $photo->width()> 240 ? 240 : $photo->width()*0.8;
+        $height = $photo->height()/$photo->width()*$width;
+        \Storage::disk('photo')->put($fileName, $photo->resize($width, $height)->stream('png', 60)->getContents());
         return $fileName;
     }
 
