@@ -9,13 +9,13 @@ Homestead.yaml
 /storage/app/picture/*
 
 ### OSX template
-.DS_Store
-.AppleDouble
-.LSOverride
+#.DS_Store
+#.AppleDouble
+#.LSOverride
 
 _ide_helper.php
 # IntelliJ project files
-.idea
-*.iml
-out
-gen
+#.idea
+#*.iml
+#out
+#gen
