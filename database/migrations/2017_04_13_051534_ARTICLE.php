@@ -19,7 +19,7 @@ class ARTICLE extends Migration
            $table->string('title');
            $table->string('content')->nullable();
            $table->integer('user_id')->unsigned();
-           $table->string('target_url');
+           $table->text('target_url');
            $table->timestamps();
            $table->tinyInteger('state')->default(1);;
            $table->index('created_at');
