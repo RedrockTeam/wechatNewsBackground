@@ -20,6 +20,7 @@ Route::get('/login', function (){
 Route::get('/', 'IndexController@show')->name('home');
 
 Route::post('/login', 'UserController@login');
+Route::get('/logout', 'IndexController@logout')->name('logout');
 
 Route::post('/Article', 'ArticleController@upload');
 

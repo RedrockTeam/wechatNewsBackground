@@ -23,7 +23,24 @@
             <link href="{{URL::asset('assets/css/metronic/pages/custom.min.css')}}" rel="stylesheet" type="text/css" />
         @stop
 @section('body-class', 'page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white page-sidebar-closed')
+        @section('header')
+            <div class="page-header navbar navbar-fixed-top">
+                <!-- BEGIN HEADER INNER -->
+                <div class="page-header-inner ">
+                    <div class="top-menu">
 
+                        <ul class="nav navbar-nav pull-right">
+                            <li >
+                                <a href="{{URL::route('logout')}}"  class="portlet-body  blue-chambray btn">
+                                    <i class="icon-logout"></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @stop
         @section('container')
         <div class="page-container">
             @parent

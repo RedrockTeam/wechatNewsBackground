@@ -40,4 +40,10 @@ class IndexController extends Controller
         ];
         return view('home', $data);
     }
+
+    public function logout() {
+        if (!empty(session('user')))
+            session()->forget('user');
+        return redirect()->route('loginPage');
+    }
 }
