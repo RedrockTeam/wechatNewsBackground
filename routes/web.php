@@ -12,20 +12,22 @@
 */
 
 
+Route::get('/',function(){
+   return view('index');
+});
 
-
-Route::get('/login', function (){
+Route::get('/background/login', function (){
     return view('login');
 })->name('loginPage');
-Route::get('/', 'IndexController@show')->name('home');
+Route::get('/background', 'IndexController@show')->name('home');
 
-Route::post('/login', 'UserController@login');
-Route::get('/logout', 'IndexController@logout')->name('logout');
+Route::post('/background/login', 'UserController@login');
+Route::get('/background/logout', 'IndexController@logout')->name('logout');
 
-Route::post('/Article', 'ArticleController@upload');
+Route::post('/background/Article', 'ArticleController@upload');
 
-Route::post('/ArticleEdit', 'ArticleController@edit');
+Route::post('/background/ArticleEdit', 'ArticleController@edit');
 
-Route::post('/ArticleState', 'ArticleController@editState');
+Route::post('/background/ArticleState', 'ArticleController@editState');
 
 

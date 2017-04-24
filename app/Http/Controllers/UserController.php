@@ -68,7 +68,7 @@ class UserController extends Controller
         ]);
         $user = User::where('username', $request->get('username'))->first();
         if(!$this->pwdVerify($request->get('password'), $user->password))
-            return \Redirect::to('/')->withErrors(['你的密码或者用户名错误']);
+            return \Redirect::action('loginPage')->withErrors(['你的密码或者用户名错误']);
         $request->session()->put('user', $user->toArray());
         return \Redirect::route('home');
     }
