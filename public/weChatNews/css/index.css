@@ -1,0 +1,140 @@
+body,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+  font-size: "Microsoft YaHei";
+}
+a {
+  text-decoration: none;
+}
+.container {
+  width: 100%;
+}
+.wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.swiper {
+  width: 30rem;
+  height: 4.8rem;
+}
+.swiper .banner {
+  position: relative;
+  float: left;
+  width: 10rem;
+  height: 4.8rem;
+}
+.swiper .banner .banner-link {
+  display: block;
+  height: 100%;
+}
+.swiper .banner .banner-img {
+  width: 10rem;
+  height: 4.8rem;
+}
+.swiper .banner p {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.4em;
+  padding: 0.53333333rem 0.66666667rem 0.32rem 0.34666667rem;
+  font-size: 0.42666667rem;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.indicator {
+  position: absolute;
+  right: 0.4rem;
+  bottom: 0.4rem;
+}
+.indicator span {
+  display: inline-block;
+  width: 0.16rem;
+  height: 0.16rem;
+  margin-left: 0.08rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  background-color: #d0cdd1;
+}
+.indicator .on {
+  background-color: #6a666f;
+}
+.content {
+  width: 100%;
+}
+.content .tab {
+  width: 100%;
+  height: 1.17333333rem;
+  background: #f2f2f2;
+}
+.content .tab div {
+  float: left;
+  width: 33.3%;
+  height: 1.17333333rem;
+  line-height: 1.17333333rem;
+  text-align: center;
+  font-size: 0.4rem;
+  overflow: hidden;
+}
+.content .tab .active {
+  color: #21b100;
+}
+.study,
+.notice,
+.news {
+  width: 100%;
+}
+.news-link {
+  display: block;
+  position: relative;
+  padding: 0.4rem 0.4rem 0.26666667rem 0.26666667rem;
+  overflow: hidden;
+}
+.news-link .news-img {
+  float: left;
+  width: 2.13333333rem;
+  height: 1.6rem;
+  margin-right: 0.26666667rem;
+}
+.news-link .news-img img {
+  width: 100%;
+  height: 100%;
+}
+.news-link .news-content {
+  overflow: hidden;
+}
+.news-link .news-content .news-title {
+  color: #000;
+  font-weight: 400;
+  font-size: 0.42666667rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.news-link .news-content .news-desc {
+  width: 100%;
+  color: #999;
+  font-weight: 400;
+  font-size: 0.34666667rem;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.3;
+}
+.news-link :after {
+  content: " ";
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px solid #e2e2e2;
+  transform: scaleY(0.5);
+}
