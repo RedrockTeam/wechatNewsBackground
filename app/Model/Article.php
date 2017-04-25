@@ -7,9 +7,9 @@ class Article extends BaseModel
 {
     protected $guarded=['state'];
     protected static $articleType = [
-         'hotArticle', 'studyMaterial', 'notice','news',
+         'hotArticle', 'studyMaterial', 'news', 'online'
     ];
-    protected static $articleTypeShow = ['热门文章','学习资料', '通知公告','基层动态'];
+    protected static $articleTypeShow = ['热门文章','学习资料', '基层动态', '线上互动'];
     protected $hidden = [];
     protected static $actions = ['delete','recover', 'hot', 'unHot'];
 

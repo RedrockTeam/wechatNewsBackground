@@ -13,11 +13,11 @@ class IndexController extends Controller
         $articles = Article::active()
             ->select('id','title','target_url', 'created_at', 'updated_at', 'type_id','user_id', 'content','state')
             ->withOnly('pictures', ['thumbnail_src', 'article_id','photo_src', 'id'], ['state','>',0])
-            ->withOnly('author', ['id', 'username'], ['state', '>', 0])
+            ->withOnly('author', ['id', 'nickname'], ['state', '>', 0])
             ->get();
         $articles = $articles->toArray();
         foreach ($articles as &$article) {
-            $article['author'] = $article['author']['username'];
+            $article['author'] = $article['author']['nickname'];
             foreach ($article['pictures'] as &$picture) {
                 unset($picture['article_id']);
             }

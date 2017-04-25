@@ -7,16 +7,24 @@ use App\Model\User;
 class UserController extends Controller
 {
     public  function register(Request $request) {
-       $this->validate($request, [
-           'username' => 'bail|between:5,25|unique:users,username|required|alpha_dash',
-           'nickname' => 'between:5,25|required|alpha_dash',
-           'password' => 'required|between:10,32|confirmed',
-       ]);
+        $validator = \Validator::make($request->all(),[
+            'username' => 'bail|between:5,25|unique:users,username|required|alpha_dash',
+            'nickname' => 'max:25|required|alpha_dash',
+            'password' => 'required|between:10,32|confirmed',
+        ]);
 //        $validator = \Validator::make($request->all(), [
 //            'username' => 'bail|between:5,25|unique:users,username|required|alpha_dash',
 //            'nickname' => 'between:5,25|required|alpha_dash',
 //            'password' => 'required|between:10,32|confirmed',
 //        ]);
+        if ($validator->fails()) {
+            return \Response::json([
+                'status' => 404,
+                'state' => 404,
+                'info' => 'error parameter',
+                'errors'=>$validator->errors()->all()
+            ], 403);
+        }
         $data = $request->only(['username', 'nickname', 'password']);
         $data['password'] = $this->pwdHash($data['password']);
         $user = User::create($data);
