@@ -48,7 +48,7 @@ function addNotice() {
 
             $.ajax({
                 method: 'GET',
-                url: 'http://redrock.team/cqupt-wechatNews/public/index.php/api/Article/notice?page='+x+'&size='+size,
+                url: 'http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php/api/Article/notice?page='+x+'&size='+size,
                 dataType: 'json',
 
                 success: function(res) {
@@ -104,7 +104,7 @@ function addStudy() {
 
             $.ajax({
                 method: 'GET',
-                url: 'http://redrock.team/cqupt-wechatNews/public/index.php/api/Article/studyMaterial?page='+y+'&size='+size,
+                url: 'http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php/api/Article/studyMaterial?page='+y+'&size='+size,
                 dataType: 'json',
 
                 success: function(res) {
@@ -154,7 +154,7 @@ function addNews() {
 
             $.ajax({
                 method: 'GET',
-                url: 'http://redrock.team/cqupt-wechatNews/public/index.php/api/Article/news?page='+z+'&size='+size,
+                url: 'http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php/api/Article/news?page='+z+'&size='+size,
                 dataType: 'json',
 
                 success: function(res) {

@@ -5,6 +5,7 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="yes" name="apple-touch-fullscreen">
     <meta content="telephone=no,email=no" name="format-detection">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0"> -->
     <script src="{{URL::asset('weChatNews/js/flexible.js')}}"></script>
     {{--<script src="js/flexible.js"></script>--}}
     <title>Document</title>

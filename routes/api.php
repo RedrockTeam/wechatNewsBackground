@@ -36,4 +36,4 @@ Route::get('/Photo/{name}', function($name){
         return view('errors.errors');
 })->name('showPicture');
 
-//Route::post('/User', 'UserController@register');
+Route::post('/User', 'UserController@register');
