@@ -8,8 +8,10 @@ var index = 0;
 var dis = 0;
 var imgArr;
 var w = $$('.container').clientWidth;
+console.log(w);
 var fs = document.getElementsByTagName('html')[0].style.fontSize.replace('px','');
 console.log(fs);
+
 
 $.ajax({
         method: 'GET',

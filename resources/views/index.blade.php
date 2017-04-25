@@ -9,7 +9,7 @@
     <meta name="x5-fullscreen" content="true">
     <script src="{{URL::asset('weChatNews/js/flexible.js')}}"></script>
     {{--<script src="js/flexible.js"></script>--}}
-    <title>Document</title>
+    <title>重邮“一学一做”微网站</title>
     <link rel="stylesheet" href="{{URL::asset('weChatNews/css/dropload.css')}}">
     <link rel="stylesheet" href="{{URL::asset('weChatNews/css/index.css')}}">
     {{--<link rel="stylesheet" href="css/index.css">--}}
@@ -27,12 +27,12 @@
         <div class="content">
             <nav class="tab">
                 <div class="active" id="studyMaterial">学习资料</div>
-                <div id="notice">通知公告</div>
                 <div id="news">基层动态</div>
+                <div id="online">线上互动</div>
             </nav>
             <div class="study area"></div>
-            <div class="notice area"></div>
             <div class="news area"></div>
+            <div class="online area"></div>
         </div>
     </div>
 <script src="{{URL::asset('weChatNews/js/support.js')}}"></script>
