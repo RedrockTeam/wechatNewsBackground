@@ -12,6 +12,7 @@ var z = 0;
 
 notice.addEventListener('touchend', function(e) {
     // changeAritcle('notice', 0, '.notice'); 
+    console.log(1);
     set('.notice', 1);
     addNotice();
     $$('.dropload-down')[1].remove();     
@@ -45,7 +46,6 @@ function addNotice() {
         loadDownFn : function(me){
             x += 1;
             var result = '';
-
             $.ajax({
                 method: 'GET',
                 url: 'http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php/api/Article/notice?page='+x+'&size='+size,
@@ -54,7 +54,6 @@ function addNotice() {
                 success: function(res) {
                     var arrLen = res.data.length;
                     var flag = res.totalPageNum;
-                    // console.log(x);
 
                     if (x <= flag) {
                         for (var i = 0; i < arrLen; i++) {
@@ -110,7 +109,6 @@ function addStudy() {
                 success: function(res) {
                     var arrLen = res.data.length;
                     var flag = res.totalPageNum;
-                    // console.log(y);
 
                     if (y <= flag) {
                         for (var i = 0; i < arrLen; i++) {
