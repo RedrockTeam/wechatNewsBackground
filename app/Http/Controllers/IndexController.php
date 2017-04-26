@@ -24,9 +24,11 @@ class IndexController extends Controller
             $article['type'] = Article::getArticleTypeShow()[$article['type_id']];
         }
         $articlesNum = Article::groupBy('type_id')->active()->selectRaw('count(id) as article_num, type_id')->get()->pluck('article_num', 'type_id')->all();
-        $articlesNum[0] = Article::active()->ArticleTypeId(0)->count();
+//        $articlesNum[0] = Article::active()->ArticleTypeId(0)->count();
         $articleTypes = [];
         foreach (Article::getArticleType() as $key => $value) {
+            if ($key === 0)
+                continue;
             $articleType['value'] =$value;
             $articleType['display'] = Article::getArticleTypeShow()[$key];
             $articleType['article_num'] = isset($articlesNum[$key]) ? $articlesNum[$key] : 0;

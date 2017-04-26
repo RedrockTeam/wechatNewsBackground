@@ -170,7 +170,7 @@
                                                             <th> 上传人员 </th>
                                                             <th class="unsearchable"> 文章类型 </th>
                                                             <th class="unsearchable"> 文章上传时间 </th>
-                                                            <th class="unsearchable unorderable"> 热门 </th>
+                                                            <th class="unsearchable unorderable  invisible"> 热门 </th>
                                                             <th class="unorderable invisible"> state </th>
                                                             <th class="unorderable invisible"> article_id </th>
                                                         </tr>
@@ -191,7 +191,7 @@
                                                                 <td> {{$article['author']}} </td>
                                                                 <td class="unsearchable" > {{$article['type']}} </td>
                                                                 <td class="center unsearchable"> {{$article['created_at']}} </td>
-                                                                <td class="unsearchable unorderable" >
+                                                                <td class="unsearchable unorderable invisible" >
                                                                     <input type="checkbox" @if($article['state']==2) {{"checked"}} @endif class="make-switch switch-large" data-label-icon="fa fa-fullscreen" data-on-text="<i class='fa fa-check'></i>" data-on-color="success" data-id="{{$article['id']}}" data-off-text="<i class='fa fa-times'></i>" data-off-color="danger"／>
                                                                 </td>
                                                                 <td class="unorderable invisible">{{$article['state']}}</td>
