@@ -41,42 +41,19 @@
 {{--<script src="{{URL::asset('weChatNews/js/swiper.js')}}"></script>--}}
 <script src="{{URL::asset('weChatNews/dist/dropload.js')}}"></script>
 <script src="{{URL::asset('weChatNews/js/notice.js')}}"></script>
-<script src="{{URL::asset('weChatNews/js/weixin.js')}}"></script>
-
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="{{URL::asset('weChatNews/js/share.js')}}"></script>
 
     {{--<!-- <script src="./js/weixin.js"></script>--}}
     <script>
             var title = '重邮“一学一做”微网站';
             var desc = '重邮共青团“学总书记讲话 做合格共青团员”微网站上线啦！';
             var link = "http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php";
-            var imgUrl = "{{URL::asset('weChatNews/imgs/leagueBadge.jpg')}}";
+            var imgUrl = "{{URL::asset('weChatNews/imgs/leagueBadge.png')}}";
 
-            wx.config({
-                debug: false,
-                appId: "{$appid}",
-                timestamp: "{$ticket.time}",
-                nonceStr: "{$ticket.nonceStr}",
-                signature: "{$ticket.signature}",
-                jsApiList: [
-                    'onMenuShareTimeline',
-                    'onMenuShareAppMessage',
-                    'onMenuShareQQ',
-                    'hideAllNonBaseMenuItem'
-                ]
-            });
-            wx.ready(function () {
-                wx.onMenuShareTimeline({
-                    title: title, // 分享标题
-                    link: link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                    },
-                    cancel: function () {
-                        // 用户取消分享后执行的回调函数
-                    }
-                });
-                wx.onMenuShareAppMessage({
+            WXSHARE.config({debug: true});
+            WXSHARE.ready(function() {
+                var option = {
                     title: title, // 分享标题
                     desc: desc, // 分享描述
                     link: link,
@@ -89,19 +66,13 @@
                     cancel: function () {
                         // 用户取消分享后执行的回调函数
                     }
-                });
-                wx.onMenuShareQQ({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: link,
-                    imgUrl: imgUrl, // 分享图标
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                    },
-                    cancel: function () {
-                        // 用户取消分享后执行的回调函数
-                    }
-                });
+                };
+                wx.onMenuShareTimeline(option);
+                wx.onMenuShareAppMessage(option);
+                wx.onMenuShareQQ(option);
+                wx.onMenuShareWeibo(option);
+                wx.onMenuShareQZone(option);
+
             });
     </script>
 </body>
