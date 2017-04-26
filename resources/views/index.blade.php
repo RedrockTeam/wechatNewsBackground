@@ -42,7 +42,7 @@
 <script src="{{URL::asset('weChatNews/dist/dropload.js')}}"></script>
 <script src="{{URL::asset('weChatNews/js/notice.js')}}"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="{{URL::asset('weChatNews/js/share.js')}}"></script>
+<script src="http://hongyan.cqupt.edu.cn/wx-api/share.js"></script>
 
     {{--<!-- <script src="./js/weixin.js"></script>--}}
     <script>
@@ -51,7 +51,7 @@
             var link = "http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php";
             var imgUrl = "{{URL::asset('weChatNews/imgs/leagueBadge.png')}}";
 
-            WXSHARE.config({debug: false});
+            WXSHARE.config({debug: true});
             WXSHARE.ready(function() {
                 var option = {
                     title: title, // 分享标题
@@ -59,19 +59,20 @@
                     link: link,
                     imgUrl: imgUrl, // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
-                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                     success: function () {
                         // 用户确认分享后执行的回调函数
+                         console.log('分享成功');
                     },
                     cancel: function () {
                         // 用户取消分享后执行的回调函数
+                         console.log('取消分享');
                     }
                 };
-                wx.onMenuShareTimeline(option);
-                wx.onMenuShareAppMessage(option);
-                wx.onMenuShareQQ(option);
-                wx.onMenuShareWeibo(option);
-                wx.onMenuShareQZone(option);
+                 wx.onMenuShareTimeline(option);
+                 wx.onMenuShareAppMessage(option);
+                 wx.onMenuShareQQ(option);
+                 wx.onMenuShareWeibo(option);
+                 wx.onMenuShareQZone(option);
 
             });
     </script>
