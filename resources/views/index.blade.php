@@ -51,7 +51,7 @@
             var link = "http://hongyan.cqupt.edu.cn/cqupt-wechatNews/public/index.php";
             var imgUrl = "{{URL::asset('weChatNews/imgs/leagueBadge.png')}}";
 
-            WXSHARE.config({debug: true});
+            WXSHARE.config({debug: false});
             WXSHARE.ready(function() {
                 var option = {
                     title: title, // 分享标题
